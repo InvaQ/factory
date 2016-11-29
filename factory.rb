@@ -2,29 +2,26 @@ class Factory
 
   def self.new(*params, &block)
 
-    klass = Class.new do
+    Class.new do
 
       attr_accessor(*params) 
-      attr_accessor :init_args
 
-      def initialize(*args)
-        @init_args = args
-        members.zip(args).each do |member, argument|
-                          instance_variable_set("@#{member}", argument)
+      def initialize(*args)        
+        members.zip(args).each do |member, arguments|
+                          send("#{member}=", arguments)
         end
       end
 
-      def [](param)
-        param = instance_variables[param][1..-1] if param.is_a? Fixnum
-        instance_variable_get("@#{param}")
+      define_method :[] do |arg|
+        arg.is_a?(Numeric) ? send(params[arg]) : send(arg)
       end
 
       define_method :members do        
         params
       end
       
-      def values
-        @init_args
+      def values        
+        members.map { |value| send(value) }        
       end
 
       def values_at(*args)

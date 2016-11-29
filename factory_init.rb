@@ -14,6 +14,7 @@ book1 = book.new("The Lathe of Heaven", "Pearline Herzog", 29)
   p "________________________"
  p "values" 
  p person1.values
+ p person3.values
  p "________________________"
  p "==" 
  p person1 == person2
